@@ -10,6 +10,8 @@ Date and time: 2/22/2021 9am-11am Pacific Standard Time
 
 Backup is https://rstudio.cloud/ if you have a problem with your Rstudio. 
 
+Here are the [slides](https://docs.google.com/presentation/d/1vbKs6gitBsAar0ynncBq_asySp0cBwt3q5YGHZ5rLAM/edit?usp=sharing)
+
 Join our low-volume [mailing list](https://groups.google.com/u/2/g/anthro-data-science) (must be signed into google) 
 
 # Outline 
@@ -32,10 +34,16 @@ install.packages("intergraph")
 
 ## Network Objects 
 
-- Examine a network object `data()
-- Create a network object from spreadsheet 
-- 
+- Create network objects in `igraph` and `statnet`
+- Add vertex attributes to network objects 
+- Extract attributes from network objects 
+- Compute centrality measures and add them as vertex attributes 
+- Convert `igraph` objects into `network` objects and vice versa using the `intergraph` package 
 
-## Visualization techniques 
+## Visualization with `statnet`
 
-##
+- Compute centrality measure for Zachary's karate network (`data(zach`))
+- Visualize centrality 
+- Change node color, edge width, and layout
+
+## Visualization with `ggraph`

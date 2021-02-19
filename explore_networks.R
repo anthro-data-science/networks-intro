@@ -2,6 +2,7 @@
 
 #### Packages #### 
 #install.packages(c('statnet','igraph','intergraph'))
+library(igraph)
 library(statnet)
 
 #### Matrices and Edgelist #### 
@@ -16,32 +17,43 @@ library(statnet)
 # So a network of 3 nodes has 9 possible edges 
 
 # A square matrix of three nodes
-m <- matrix(c(0,0,0,
-              0,0,0,
-              0,0,0), 
-            nrow=3)
-m
+v <- letters[9:11]
+v
 
-# Add an edge from 1 to 3, and from 2 to 1
-m[1,3] <- 1
-m[2,1] <- 1
-m
+M <- matrix(c(0,0,1,
+              1,1,0,
+              1,0,0), 
+            nrow=length(v), 
+            dimnames=list(v,v)
+)
+M
+
+# Add edge from 2 to 3, and remove the loop
+M[2,3] <- 1
+M[2,2] <- 0
+M
 
 # the diagonal are "loops" or self connections 
-diag(m) 
+diag(M) 
 
 # Create a network object from matrix m 
-o <- network(m)
+o <- network(M)
 gplot(o, displaylabels = T)
 
 # Edgelist 
 # Two columns representing sender (1) and receiver (2)
-e <- rbind(c(1,3),
-           c(2,1))
-e
+E <- rbind(c('i','j'), 
+           c('i','k'),
+           c('j','j'),
+           c('k','i'))
+E
 
+# add and edge 
+E <- rbind(E, c('j','k'))
+E <- E[-3,]
+E
 # make edgelist into a network object 
-o <- network(e, matrix.type = 'edgelist')
+o <- network(E, matrix.type = 'edgelist')
 gplot(o, displaylabels = T)
 
 #### Simulate a random graph #### 
@@ -54,37 +66,86 @@ m <- matrix(rbinom(N^2, 1, 0.5),
 diag(m) <- 0
 m
 
+
+#### Network objects in igraph #### 
+library(igraph)
+M
+E
+
+#### Make up some vertex attributes 
+att <- data.frame(
+    name = c("i","j","k"), 
+    age = c(20,27,34),
+    color = c('tomato', 
+              'cornflowerblue', 
+              'darkorchid')
+)
+att
+
+# from a matrix
+g_adj <- graph.adjacency(M)
+g_adj
+
+set_vertex_attr(g_adj, name = 'age', value = att$age)
+set_vertex_attr(g_adj, name = 'color', value = att$color)
+
+# from an edgelist
+g_df <- graph.data.frame(E)
+g_df
+
+# a network with attributes 
+new_g <- graph.data.frame(E, vertices = att)
+new_g
+
+V(new_g)$color
+
+#### Network objects in statnet ####
+gM <- network(M, vertex.attr = att)
+gE <- network(E, vertex.attr = att, matrix.type = "edgelist")
+gE
+
+gE %v% "vertex.names"
+gE %v% "color"
+
+
+# converting between objects 
+class(gE)
+
+class(g_df)
+
+ig2net <- intergraph::asNetwork(g_df)
+net2ig <- intergraph::asIgraph(gE)
+
+
 #### Manipulating network objects 
 data("zach")
 z <- zach
-z
 
-# summarize network
-set.network.attribute(z, 'density', network.density(z))
-z
+# plot the network
+#png("ZachBasic.png", height = 4, width = 4, res = 600, units = "in")
+par(mar=c(0,0,0,0))
+gplot(zach, usearrows = F)
+#dev.off()
 
-# use %v% and %e% operators to extract attributes 
-z %v% 'club'
 
 # set vertex attribute for degree centrality 
-set.vertex.attribute(z, attrname = 'degree', 
+degree(zach, gmode = "graph") # undirected 
+
+set.vertex.attribute(zach, attrname = 'degree', 
                      value = degree(z, gmode = 'graph'))
 
-set.vertex.attribute(z, attrname = 'between', 
+set.vertex.attribute(zach, attrname = 'between', 
                      value = betweenness(z, gmode = 'graph'))
-z
 
-# summary table 
-df <- data.frame(
-    ID = z %v% 'vertex.names',
-    Faction = z %v% 'faction.id',
-    Degree = z %v% 'degree',
-    Betweeness = z %v% 'between' 
-)
+# plot it
 
-# distributions
-library(tidyverse)
+#png("ZachDegree.png", height = 6, width = 6, units = "in", res = 600)
+par(mar=c(0,0,0,0))
+gplot(zach, usearrows = F, 
+      vertex.cex = log(zach %v% "degree"))
+#dev.off()
 
-df %>% ggplot(aes(Degree)) + geom_histogram(binwidth=1)
-df %>% ggplot(aes(Betweeness/max(Betweeness))) + geom_histogram()
+## Change node color, edge width, and layouts
+
+
 
