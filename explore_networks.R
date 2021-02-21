@@ -75,7 +75,7 @@ E
 #### Make up some vertex attributes 
 att <- data.frame(
     name = c("i","j","k"), 
-    age = c(20,27,34),
+    size = c(20,27,34),
     color = c('tomato', 
               'cornflowerblue', 
               'darkorchid')
@@ -98,6 +98,19 @@ new_g <- graph.data.frame(E, vertices = att)
 new_g
 
 V(new_g)$color
+
+# Visualize igraph object
+#png("BasicTriad.png", height = 2, width = 2, units = "in", res = 600)
+par(mar=c(0,0,0,0))
+plot(new_g, 
+     vertex.size = 30,
+     vertex.color = 'cornflowerblue',
+     vertex.label.color = 'white', 
+     edge.color = 'black',
+     edge.arrow.size = 0.5, 
+     layout = layout.kamada.kawai)
+#dev.off()
+
 
 #### Network objects in statnet ####
 gM <- network(M, vertex.attr = att)
