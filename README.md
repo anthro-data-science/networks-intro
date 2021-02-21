@@ -19,12 +19,11 @@ Join our low-volume [mailing list](https://groups.google.com/u/2/g/anthro-data-s
 ## Install and load packages 
 
 - Create a new project directory "Intro to networks"
-- Install `statnet`, `igraph`, and `intergraph` packages
+- Install `statnet`, `igraph`, `intergraph`, and `ggraph` packages
 
 ```{r}
 install.packages("statnet", dependencies = TRUE)
-install.packages("igraph")
-install.packages("intergraph")
+install.packages(c("igraph","intergraph","ggraph"))
 ```
 
 ## Matrices and Edgelists
@@ -32,12 +31,12 @@ install.packages("intergraph")
 - Manually create a matrix 
 - Manually create an edgelist 
 
-## Network Objects 
+## `igraph` and `network` objects 
 
-- Create network objects in `igraph` and `statnet`
+- Create objects in `igraph` and `statnet`
 - Add vertex attributes to network objects 
 - Extract attributes from network objects 
-- Compute centrality measures and add them as vertex attributes 
+- Plot `igraph` object and alter aesthetics 
 - Convert `igraph` objects into `network` objects and vice versa using the `intergraph` package 
 
 ## Visualization with `statnet`
