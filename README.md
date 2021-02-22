@@ -46,3 +46,9 @@ install.packages(c("igraph","intergraph","ggraph"))
 - Change node color, edge width, and layout
 
 ## Visualization with `ggraph`
+
+- Covert `igraph` object to `tbl_graph` for data manipulation using `tidygraph`
+- Visualize edges: width and transparency    
+- Visualize nodes: size, color, and labels 
+- Facet plot based on node attributes
+- Change network layouts
