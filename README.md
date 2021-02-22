@@ -47,7 +47,7 @@ install.packages(c("igraph","intergraph","ggraph"))
 
 ## Visualization with `ggraph`
 
-- Covert `igraph` object to `tbl_graph` for data manipulation using `tidygraph`
+- Convert `igraph` object to `tbl_graph` for data manipulation using `tidygraph`
 - Visualize edges: width and transparency    
 - Visualize nodes: size, color, and labels 
 - Facet plot based on node attributes
