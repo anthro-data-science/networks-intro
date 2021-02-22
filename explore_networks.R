@@ -57,14 +57,21 @@ o <- network(E, matrix.type = 'edgelist')
 gplot(o, displaylabels = T)
 
 #### Simulate a random graph #### 
+# set parameters
 set.seed(777)
-N <-  7
-m <- matrix(rbinom(N^2, 1, 0.5),
-            nrow = N)
+N <- 25
+N_edges <- N^2
 
-# no loops
-diag(m) <- 0
-m
+# Bernoulli random graph
+M <- matrix(rbinom(N_edges,
+                   size = 1,
+                   prob = 0.3),	
+            nrow = N,
+            dimnames = list(1:N,1:N))
+#png("Rando.png", height = 3, width = 3, res = 600, units = "in")
+par(mar=c(0,0,0,0))
+gplot(network(M))
+#dev.off()
 
 
 #### Network objects in igraph #### 
@@ -74,11 +81,11 @@ E
 
 #### Make up some vertex attributes 
 att <- data.frame(
-    name = c("i","j","k"), 
-    size = c(20,27,34),
-    color = c('tomato', 
-              'cornflowerblue', 
-              'darkorchid')
+  name = c("i","j","k"), 
+  size = c(20,27,34),
+  color = c('tomato', 
+            'cornflowerblue', 
+            'darkorchid')
 )
 att
 
@@ -159,6 +166,30 @@ gplot(zach, usearrows = F,
 #dev.off()
 
 ## Change node color, edge width, and layouts
+unique(zach %v% 'faction')
 
+set.vertex.attribute(
+  zach,
+  attrname = 'faction.col',
+  ifelse(zach %v% 'faction.id' == 2, '#18206f', 
+         ifelse(zach %v% 'faction.id' == 1, '#5d77d5', 
+                ifelse(zach %v% 'faction.id' == 0, '#f5e2c8', 
+                       ifelse(zach %v% 'faction.id' == -1, '#fba860', '#a35f00'))))
+)
+
+# plot it
+#png("ZachColors.png", height = 4, width = 5, units = "in", res = 600)
+par(mar=c(1,1,1,5), xpd=T)
+gplot(zach, usearrows = F, 
+      vertex.cex = log(zach %v% 'degree'+1), 
+      vertex.col = zach %v% 'faction.col',
+      edge.lwd = zach %e% 'contexts', 
+      edge.col = adjustcolor('black', alpha=0.3), 
+      mode = "kamadakawai")
+legend('bottomright', pch = 19, bty = 'n', inset = c(-0.2,0),
+       legend=c('Mr. Hi (strong)','Mr. Hi (weak)','Neutral',
+                'John (weak)','John (strong)'),
+       col = c('#18206f','#5d77d5','#f5e2c8','#fba860','#a35f00' ))
+#dev.off()
 
 
