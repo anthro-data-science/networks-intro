@@ -6,9 +6,10 @@ library(tidygraph)
 library(ggraph) # ggplot2 of networks
 
 # network visualization
-data(zach)
+class(zach)
 net_ggraph <- intergraph::asIgraph(zach)
-data(net_ggraph)
+class(net_ggraph)
+net_ggraph
 
 # get degree
 graph_tbl <- net_ggraph %>% 
