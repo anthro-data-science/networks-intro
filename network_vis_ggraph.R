@@ -6,6 +6,7 @@ library(tidygraph)
 library(ggraph) # ggplot2 of networks
 
 # network visualization
+data(zach)
 class(zach)
 net_ggraph <- intergraph::asIgraph(zach)
 class(net_ggraph)
